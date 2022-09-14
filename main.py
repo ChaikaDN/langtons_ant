@@ -1,3 +1,4 @@
+import random
 import sys
 import pygame as pg
 import pygame.gfxdraw
@@ -15,7 +16,7 @@ def draw_field(screen, cells: list, size: int) -> None:
     for i, raw in enumerate(cells):
         for j, is_black in enumerate(raw):
             if is_black:
-                draw_pixel(screen, [i * 8, j * 8], size, (0, 0, 0))
+                draw_pixel(screen, [i * size, j * size], size, (0, 0, 0))
 
 
 def main():
@@ -27,6 +28,8 @@ def main():
     cells = [[False for _ in range(100)] for _ in range(100)]
 
     ant_pos = [50, 50]
+    directions = ((-1, 0), (0, 1), (1, 0), (0, -1))
+    dir_i = 3
 
     while True:
         for event in pg.event.get():
@@ -34,14 +37,19 @@ def main():
                 sys.exit()
 
         screen.fill((255, 255, 255))
-
         draw_field(screen, cells, 8)
         draw_ant(screen, ant_pos, 8)
 
-        ant_pos[0] = (ant_pos[0] + 1) % 100
+        if not cells[ant_pos[0]][ant_pos[1]]:
+            dir_i = (dir_i + 1) % 4
+        else:
+            dir_i = (dir_i - 1) % 4
+
+        cells[ant_pos[0]][ant_pos[1]] = not cells[ant_pos[0]][ant_pos[1]]
+        ant_pos = [(c + c1) % 100 for c, c1 in zip(ant_pos, directions[dir_i])]
 
         pg.display.flip()
-        clock.tick(5)
+        clock.tick(120)
 
 
 if __name__ == '__main__':
