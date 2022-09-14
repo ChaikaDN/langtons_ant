@@ -20,14 +20,17 @@ def draw_field(screen, cells: list, size: int) -> None:
 
 
 def main():
+    window_size = (800, 800)
+    shape = 200
+    cell_size = window_size[0] // shape
+
     clock = pg.time.Clock()
     pg.init()
-    screen = pg.display.set_mode((800, 800))
+    screen = pg.display.set_mode(window_size)
     pg.display.set_caption("Langton's Ant")
 
-    cells = [[False for _ in range(100)] for _ in range(100)]
-
-    ant_pos = [50, 50]
+    cells = [[False for _ in range(shape)] for _ in range(shape)]
+    ant_pos = [shape//2, shape//2]
     directions = ((-1, 0), (0, 1), (1, 0), (0, -1))
     dir_i = 3
 
@@ -37,8 +40,8 @@ def main():
                 sys.exit()
 
         screen.fill((255, 255, 255))
-        draw_field(screen, cells, 8)
-        draw_ant(screen, ant_pos, 8)
+        draw_field(screen, cells, cell_size)
+        draw_ant(screen, ant_pos, cell_size)
 
         if not cells[ant_pos[0]][ant_pos[1]]:
             dir_i = (dir_i + 1) % 4
@@ -46,7 +49,7 @@ def main():
             dir_i = (dir_i - 1) % 4
 
         cells[ant_pos[0]][ant_pos[1]] = not cells[ant_pos[0]][ant_pos[1]]
-        ant_pos = [(c + c1) % 100 for c, c1 in zip(ant_pos, directions[dir_i])]
+        ant_pos = [(c + c1) % shape for c, c1 in zip(ant_pos, directions[dir_i])]
 
         pg.display.flip()
         clock.tick(120)
