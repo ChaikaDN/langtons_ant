@@ -1,22 +1,21 @@
-import random
 import sys
 import pygame as pg
 import pygame.gfxdraw
 
 
-def draw_pixel(screen, position: list, size: int, color: tuple) -> None:
-    pygame.gfxdraw.box(screen, (position[0], position[1], size, size), color)
+def draw_pixel(screen: pg.Surface, position: list, size: int, color: tuple) -> None:
+    pygame.gfxdraw.box(screen, (position[0] * size, position[1] * size, size, size), color)
 
 
-def draw_ant(screen, position, size):
-    pygame.gfxdraw.box(screen, (position[0] * size, position[1] * size, size, size), (255, 0, 0))
+def draw_ant(screen: pg.Surface, position: list, size: int) -> None:
+    draw_pixel(screen, position, size, (255, 0, 0))
 
 
 def draw_field(screen, cells: list, size: int) -> None:
     for i, raw in enumerate(cells):
         for j, is_black in enumerate(raw):
             if is_black:
-                draw_pixel(screen, [i * size, j * size], size, (0, 0, 0))
+                draw_pixel(screen, [i, j], size, (0, 0, 0))
 
 
 def main():
